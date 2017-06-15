@@ -101,7 +101,7 @@ soup = BeautifulSoup(html, 'lxml')
 blocks = soup.find('div', 'field-item even').find_all('li')
 for block in blocks:
     link = block.find('a')
-    url = 'http://www.qegateshead.nhs.uk' + urllib.quote(link['href'])
+    url = 'http://www.qegateshead.nhs.uk' + link['href']
     if '.csv' in url:
         csvMth = 'Y1'
         csvYr = link.text.split('/')[0]
