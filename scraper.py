@@ -98,23 +98,18 @@ soup = BeautifulSoup(html, 'lxml')
 #### SCRAPE DATA
 
 
-blocks = soup.find('div', 'field-item even').find_all('li')
+blocks = soup.find_all('a', text=re.compile('Spend over'))
 for block in blocks:
-    link = block.find('a')
-    url = 'http://www.qegateshead.nhs.uk' + link['href']
-    if '.csv' in url:
-        csvMth = 'Y1'
-        csvYr = link.text.split('/')[0]
-    elif '.xlsx' in url:
-        csvMth = link.text.split()[-2][:3]
-        if 'Jan' in link.text or 'Feb' in link.text or 'Mar' in link.text:
-            csvYr = '20' + link.text.split()[-1].split('-')[-1]
-        else:
-            csvYr = '20' + link.text.split()[-1].split('-')[0]
+    link = block['href']
+    if 'http' not in link:
+        url = 'https://www.qegateshead.nhs.uk' + link
+    else:
+        url = link
+
+    csvYr = '20'+block.text.split('-')[0][-2:]
+    csvMth = block.text.split()[3]
     csvMth = convert_mth_strings(csvMth.upper())
     data.append([csvYr, csvMth, url])
-
-
 
 
 #### STORE DATA 1.0
